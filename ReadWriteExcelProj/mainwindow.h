@@ -7,6 +7,10 @@ the contents of the table to the excel file starting at A1*/
 #include <QMainWindow>
 #include <QFile>
 #include <QDebug>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QAxobject>
+#include <QException>
 
 namespace Ui {
 class MainWindow;
@@ -29,7 +33,7 @@ private slots:
 
     void on_btnWrite_clicked();
 
-    bool writeToXlsx(QFile *txtFile, QString id, QString excelUrl, QString outputUrl);
+    QString writeToXlsx(QFile *txtFile, QString id, QString excelUrl, QString outputUrl);
     bool readFromXlsx(QString fileUrl);
     bool findNextColumn(QFile *txtFile, QString id);
 
@@ -39,18 +43,14 @@ private slots:
 
     void on_outputUrl_editingFinished();
 
-
-
     void on_actionAbout_triggered();
 
 private:
     Ui::MainWindow *ui;
 
-    QFile *csvFile = new QFile("testExcel.csv");
-    QFile *xlsxFile = new QFile("Book1.xlsx");
+    void reformatTxt(QFile *txtFile);
 
     QString numToAlph(int num);
-    QString cellText;
 };
 
 #endif // MAINWINDOW_H

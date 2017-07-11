@@ -4,10 +4,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QFileDialog>
-#include <QTextStream>
-#include <QAxobject>
-#include <QException>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,7 +27,7 @@ void MainWindow::on_btnReadTemplate_clicked()
 }
 
 void MainWindow::on_btnReadOutput_clicked()
-{
+{ //Reads from the file location determined by the template file and the save name selected
     QString fullOutputUrl = ui->fileUrl->text().split('/').back();
     fullOutputUrl = ui->fileUrl->text().remove(
                 ui->fileUrl->text().length()-fullOutputUrl.length(), fullOutputUrl.length());
@@ -43,13 +40,11 @@ void MainWindow::on_btnReadOutput_clicked()
 }
 
 bool MainWindow::readFromXlsx(QString fileUrl)
-{
+{ //Opens the excel file at location fileUrl for reading or editing.
     QAxObject excel("Excel.Application");
     QFile f(fileUrl);
     if(excel.isNull() || !f.exists())
-    {
         return false;
-    }
     f.deleteLater();
 
     excel.setProperty("Visible", true);
@@ -74,27 +69,9 @@ void MainWindow::on_btnWrite_clicked()
     txtFile->open(QIODevice::ReadOnly);
     if(!txtFile->peek(1).startsWith("="))
     { //Reformat the text file so that it can be read properly
-        ui->lblStatus->setText("Reformatting text file...");
-        ui->lblStatus->repaint();
-
-        QByteArray newBA;
-        while(!txtFile->atEnd())
-        {
-            newBA.append(txtFile->readLine().split(' ').back());
-        }
-        txtFile->close();
-
-        //Make the reformatted file a separate file in the same folder
-        QString newName = ui->txtUrl->text().split('/').back();
-        newName = ui->txtUrl->text().remove(
-                    ui->txtUrl->text().length()-4, 4);
-        newName += " reformatted.txt";
-
-        txtFile->setFileName(newName.toLocal8Bit());
-        txtFile->open(QIODevice::WriteOnly);
-        txtFile->write(newBA);
-        txtFile->close();
+        reformatTxt(txtFile);
     }
+    txtFile->close();
 
     ui->lblStatus->setText("Writing excel file...");
     ui->lblStatus->repaint();
@@ -104,35 +81,47 @@ void MainWindow::on_btnWrite_clicked()
                 ui->fileUrl->text().length()-fullOutputUrl.length(), fullOutputUrl.length());
     fullOutputUrl += ui->outputUrl->text() + ".xlsx";
 
-    if(writeToXlsx(txtFile, ui->lineId->text(),
-                   ui->fileUrl->text(), fullOutputUrl))
-        ui->lblStatus->setText("Successfully written.");
-    else
-        ui->lblStatus->setText("Error: Failed to write to file.");
+    QString e = writeToXlsx(txtFile, ui->lineId->text(),
+                   ui->fileUrl->text(), fullOutputUrl);
+    ui->lblStatus->setText(e);
 }
 
-bool MainWindow::writeToXlsx(QFile *txtFile, QString id, QString excelUrl,  QString outputUrl)
+void MainWindow::reformatTxt(QFile *txtFile)
+{ //Reformats the .txt file and saves it to a separate file in the same directory
+    ui->lblStatus->setText("Reformatting text file...");
+    ui->lblStatus->repaint();
+
+    QByteArray newBA;
+    while(!txtFile->atEnd())
+        newBA.append(txtFile->readLine().split(' ').back());
+    txtFile->close();
+
+    //Make the reformatted file a separate file in the same folder
+    QString newName = ui->txtUrl->text().split('/').back();
+    newName = ui->txtUrl->text().remove(
+                ui->txtUrl->text().length()-4, 4);
+    newName += " reformatted.txt";
+
+    txtFile->setFileName(newName.toLocal8Bit());
+    txtFile->open(QIODevice::WriteOnly);
+    txtFile->write(newBA);
+    txtFile->close();
+}
+
+QString MainWindow::writeToXlsx(QFile *txtFile, QString id, QString excelUrl,  QString outputUrl)
 {   /* finds the url of the excel file to write the contents of the text file to with the
     correct id and saves the edited file to the output url */
 
     txtFile->open(QIODevice::ReadOnly);
 
     if(!txtFile->readLine().startsWith("=")) //text file should start with "="
-    {
-        qDebug() << tr("Error: File doesn't start with '='.");
-        return false;
-    }
+        return tr("Error: File doesn't start with '='.");
     if(!findNextColumn(txtFile, id)) //Text file should have at least one matching entry
-    {
-        qDebug() << tr("Error: File does not have any entries with the matching id.");
-    }
+        return tr("Error: File does not have any entries with the matching id.");
 
     QAxObject excel("Excel.Application");
     if(excel.isNull()) //Excel file should exist
-    {
-        qDebug() << tr("Error: The excel file is null.");
-        return false;
-    }
+        return tr("Error: The excel file is null.");
 
     //excel.setProperty("Visible", true);
 
@@ -179,7 +168,7 @@ bool MainWindow::writeToXlsx(QFile *txtFile, QString id, QString excelUrl,  QStr
 
 /*    QAxObject *columns = worksheet->querySubObject("Columns(cons QString&:const QString&)",
  *                                                    "A", numToAlph(col));
- *    columns->dynamicCall("AutoFit()"); */
+ *    columns->dynamicCall("AutoFit()"); //Auto-fits the text so it is shown fully */
 
     // Save and close the excel file
     //excel.setProperty ("DisplayAlerts", 0);
@@ -187,11 +176,11 @@ bool MainWindow::writeToXlsx(QFile *txtFile, QString id, QString excelUrl,  QStr
     //excel.setProperty("DisplayAlerts", 1);
     workbook->dynamicCall("Close (Boolean)", false);
     excel.dynamicCall("Quit (void)");
-    return true;
+    return "Successfully written.";
 }
 
 bool MainWindow::findNextColumn(QFile *txtFile, QString id)
-{
+{ //Useful for when different entries with the same id in the text file are not ordered
     QString nextLine;
     while(true)
     { //Finds the next entry in txtFile with the correct ID
@@ -211,7 +200,7 @@ bool MainWindow::findNextColumn(QFile *txtFile, QString id)
 }
 
 QString MainWindow::numToAlph(int num)
-{   //0 is A, 26 is AA
+{   //0 is A, 26 is AA.  These are the column names in excel documents.
     QString output = "";
     QChar curNum;
     while(num >= 26)
