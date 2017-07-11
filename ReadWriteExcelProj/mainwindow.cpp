@@ -71,21 +71,28 @@ void MainWindow::on_btnWrite_clicked()
         return;
     }
 
-    QByteArray newStr;
     txtFile->open(QIODevice::ReadOnly);
-    if(!txtFile->peek(8).startsWith("="))
-    {
+    if(!txtFile->peek(1).startsWith("="))
+    { //Reformat the text file so that it can be read properly
         ui->lblStatus->setText("Reformatting text file...");
         ui->lblStatus->repaint();
 
+        QByteArray newBA;
         while(!txtFile->atEnd())
         {
-            newStr.append(txtFile->readLine().split(' ').back());
+            newBA.append(txtFile->readLine().split(' ').back());
         }
         txtFile->close();
 
+        //Make the reformatted file a separate file in the same folder
+        QString newName = ui->txtUrl->text().split('/').back();
+        newName = ui->txtUrl->text().remove(
+                    ui->txtUrl->text().length()-4, 4);
+        newName += " reformatted.txt";
+
+        txtFile->setFileName(newName.toLocal8Bit());
         txtFile->open(QIODevice::WriteOnly);
-        txtFile->write(newStr);
+        txtFile->write(newBA);
         txtFile->close();
     }
 
@@ -107,9 +114,6 @@ void MainWindow::on_btnWrite_clicked()
 bool MainWindow::writeToXlsx(QFile *txtFile, QString id, QString excelUrl,  QString outputUrl)
 {   /* finds the url of the excel file to write the contents of the text file to with the
     correct id and saves the edited file to the output url */
-    int col = 0;
-    int row = 0;
-
 
     txtFile->open(QIODevice::ReadOnly);
 
@@ -142,6 +146,8 @@ bool MainWindow::writeToXlsx(QFile *txtFile, QString id, QString excelUrl,  QStr
     QAxObject *range;
     QString cell;
     QString cellStr;
+    int col = 0;
+    int row = 0;
 
     while(txtFile->readLine().startsWith("start"))
     { //while there are more columns with the matching id
@@ -238,4 +244,10 @@ void MainWindow::on_outputUrl_editingFinished()
     ui->btnWrite->setText(newTxt);
 }
 
-
+void MainWindow::on_actionAbout_triggered()
+{
+    ui->lblStatus->setText("To use: select a text file with the data that you want to insert \
+into the excel template file.  Clicking on the buttons opens a file browser to make finding \
+the files easier.  Then, enter the id of the data in the text file that you want to extract.  \
+  Also enter a file name that the edited excel will be saved to.  These cannot be left blank.");
+}
