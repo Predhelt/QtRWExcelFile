@@ -5,7 +5,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -91,18 +90,25 @@ void MainWindow::reformatTxt(QFile *txtFile)
     ui->lblStatus->setText("Reformatting text file...");
     ui->lblStatus->repaint();
 
-    QByteArray newBA;
-    while(!txtFile->atEnd())
-        newBA.append(txtFile->readLine().split(' ').back());
-    txtFile->close();
-
     //Make the reformatted file a separate file in the same folder
     QString newName = ui->txtUrl->text().split('/').back();
     newName = ui->txtUrl->text().remove(
                 ui->txtUrl->text().length()-4, 4);
     newName += " reformatted.txt";
 
+    QByteArray newBA;
+    while(!txtFile->atEnd())
+        newBA.append(txtFile->readLine().split(' ').back());
+    txtFile->close();
+
     txtFile->setFileName(newName.toLocal8Bit());
+    if(txtFile->exists())
+    {
+        QFileDialog confirmDialog;
+        if(!confirmDialog.confirmOverwrite()) //FIXME: Just returns true. No dialog pops up
+            return;
+    }
+    //Append the desired text into newBA to be written to the new file
     txtFile->open(QIODevice::WriteOnly);
     txtFile->write(newBA);
     txtFile->close();
@@ -222,8 +228,8 @@ void MainWindow::on_btnTxtFile_clicked()
 
 void MainWindow::on_btnExcelFile_clicked()
 {
-    QFileDialog txtDialog;
-    ui->fileUrl->setText(txtDialog.getOpenFileName(this, "Find your Excel file", "",
+    QFileDialog xlDialog;
+    ui->fileUrl->setText(xlDialog.getOpenFileName(this, "Find your Excel file", "",
                                                    "Excel (*.xls *.xlsx);;All (*.*)"));
 }
 
