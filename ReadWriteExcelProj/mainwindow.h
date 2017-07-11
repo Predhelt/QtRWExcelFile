@@ -6,6 +6,7 @@ the contents of the table to the excel file starting at A1*/
 
 #include <QMainWindow>
 #include <QFile>
+#include <QDebug>
 
 namespace Ui {
 class MainWindow;
@@ -23,12 +24,22 @@ public slots:
     //void exportCSV(QString fileUrl);
 
 private slots:
-    void on_btnRead_clicked();
+    void on_btnReadTemplate_clicked();
+    void on_btnReadOutput_clicked();
 
     void on_btnWrite_clicked();
 
-    bool writeToXlsx(QString fileUrl, QString outputUrl);
-    void readFromXlsx(QString fileUrl);
+    bool writeToXlsx(QFile *txtFile, QString id, QString excelUrl, QString outputUrl);
+    bool readFromXlsx(QString fileUrl);
+    bool findNextColumn(QFile *txtFile, QString id);
+
+    void on_btnTxtFile_clicked();
+
+    void on_btnExcelFile_clicked();
+
+    void on_outputUrl_editingFinished();
+
+
 
 private:
     Ui::MainWindow *ui;
@@ -37,10 +48,7 @@ private:
     QFile *xlsxFile = new QFile("Book1.xlsx");
 
     QString numToAlph(int num);
-    QString cellText; /* TODO: Read an input text file and retrieve the information that will go
-    in each cell.  Each cell can either be read one at a time and plotted one at a time or they
-    can all be read at once and plotted using specific formatting.  Figure out which one makes
-    more sense or works better*/
+    QString cellText;
 };
 
 #endif // MAINWINDOW_H

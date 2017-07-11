@@ -10,6 +10,12 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>103</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -18,18 +24,85 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QPushButton" name="btnTxtFile">
+          <property name="minimumSize">
+           <size>
+            <width>103</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Text File:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txtUrl">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="lblUrl">
+         <widget class="QPushButton" name="btnExcelFile">
           <property name="text">
-           <string>URL:</string>
+           <string>Template Excel File:</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="fileUrl">
           <property name="text">
-           <string>C:/Users/Mikrolar/Documents/Qt Projects/ReadWriteExcelProj/Book1.xlsx</string>
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="lblId">
+          <property name="minimumSize">
+           <size>
+            <width>103</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Id: </string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>80</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineId">
+          <property name="text">
+           <string>1</string>
           </property>
          </widget>
         </item>
@@ -38,74 +111,45 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLabel" name="lblSaveAs">
+         <widget class="QLabel" name="lblSaveName">
+          <property name="minimumSize">
+           <size>
+            <width>103</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
-           <string>Save As: </string>
+           <string>Save name: </string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
         <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>80</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QLineEdit" name="outputUrl">
           <property name="text">
-           <string>C:/Users/Mikrolar/Documents/Qt Projects/ReadWriteExcelProj/output.xlsx</string>
+           <string>output</string>
           </property>
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QTableWidget" name="tableWidget">
-        <row>
-         <property name="text">
-          <string>Row1</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Row2</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Row3</string>
-         </property>
-        </row>
-        <column>
-         <property name="text">
-          <string>Col1</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Col2</string>
-         </property>
-        </column>
-        <item row="0" column="0">
-         <property name="text">
-          <string>8</string>
-         </property>
-        </item>
-        <item row="0" column="1">
-         <property name="text">
-          <string>i(#$l./;'\</string>
-         </property>
-        </item>
-        <item row="1" column="0">
-         <property name="text">
-          <string>Hello World</string>
-         </property>
-        </item>
-        <item row="2" column="0">
-         <property name="text">
-          <string>9999999999.99</string>
-         </property>
-        </item>
-        <item row="2" column="1">
-         <property name="text">
-          <string>free</string>
-         </property>
-        </item>
-       </widget>
       </item>
       <item>
        <widget class="QLabel" name="lblStatus">
@@ -122,38 +166,33 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QPushButton" name="btnRead">
-        <property name="text">
-         <string>Read File</string>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QPushButton" name="btnReadTemplate">
+          <property name="text">
+           <string>Read Template File</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnReadOutput">
+          <property name="text">
+           <string>Read Output File</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="QPushButton" name="btnWrite">
         <property name="text">
-         <string>Write File</string>
+         <string>Write File as output.xlsx</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>400</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-   </widget>
-   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
