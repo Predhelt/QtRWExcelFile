@@ -1,6 +1,10 @@
-/*This project asks for the user to input the location of an existing excel file and the
-desired output location and either opens the excel file to be read by the user or writes
-the contents of the table to the excel file starting at A1*/
+/* This project asks for the user to input the location of an existing text
+ * file with data to be added to an existing excel file template whose location
+ * must also be given.  The data with the given ID in the text file will be
+ * written into the template file and saved to a new excel file in the same
+ * directory as the template file with either the given save name or the ID
+ * of the extracted data if no save name is given. */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
