@@ -35,25 +35,24 @@ private slots:
 
     void on_btnWrite_clicked();
 
-    QString writeToXlsx(QFile *txtFile, QString id, QString excelUrl, QString outputUrl);
-    void readFromXlsx(QString fileUrl);
-    bool findNextColumn(QFile *txtFile, QString id);
-
     void on_btnTxtFile_clicked();
-
     void on_btnExcelFile_clicked();
 
     void on_outputUrl_editingFinished();
+    void on_lineId_editingFinished();
 
     void on_actionAbout_triggered();
 
-    void on_lineId_editingFinished();
+    // Helper functions
+    QString writeToXlsx(QFile *txtFile, QString id, QString excelUrl, QString outputUrl);
+    void readFromXlsx(QString fileUrl);
+
 
 private:
     Ui::MainWindow *ui;
 
     bool reformatTxt(QFile *txtFile);
-
+    bool findNextColumn(QFile *txtFile, QString id);
     QString numToAlph(int num);
 };
 
