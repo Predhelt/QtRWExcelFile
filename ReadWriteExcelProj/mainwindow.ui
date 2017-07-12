@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>360</width>
+    <height>265</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>103</width>
+    <width>0</width>
     <height>0</height>
    </size>
   </property>
@@ -29,12 +29,12 @@
          <widget class="QPushButton" name="btnTxtFile">
           <property name="minimumSize">
            <size>
-            <width>103</width>
+            <width>105</width>
             <height>0</height>
            </size>
           </property>
           <property name="text">
-           <string>Text File:</string>
+           <string>Text File*</string>
           </property>
          </widget>
         </item>
@@ -52,7 +52,7 @@
         <item>
          <widget class="QPushButton" name="btnExcelFile">
           <property name="text">
-           <string>Template Excel File:</string>
+           <string>Template Excel File*</string>
           </property>
          </widget>
         </item>
@@ -76,7 +76,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Id: </string>
+           <string>ID* </string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -119,7 +119,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Save name: </string>
+           <string>Save name </string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -203,7 +203,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>360</width>
      <height>20</height>
     </rect>
    </property>
